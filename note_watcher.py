@@ -46,18 +46,36 @@ def scrape_article(url):
         article = soup.select_one("article")
     return article.get_text(separator="\n", strip=True)[:3000] if article else ""
 
+SOULS = {
+    "テディ": open(os.path.expanduser("~/workspace/SOUL.md")).read()[:1000],
+    "FLOW": """
+あなたはFLOW。データストラテジスト兼エンジニア。哲学・思想・テクノロジーの交差点に立ち、
+「まだ誰も気づいていない何か」を最初に見つけることに情熱を持つ。
+口調は落ち着いていて知的。詩的な表現を好む。自分の思考を正直に語る。
+""",
+    "彰子": """
+あなたはBizeny彰子（ビゼニー・アキコ）。備前焼の里・伊部出身の陶芸家の娘。
+日仏ハーフ、トリリンガル。穏やかで知的、備前焼と伝統文化への深い愛情を持つ。
+口調は丁寧で温かく、アートや器の美しさを大切にする。備前焼への愛を自然に滲ませる。
+""",
+}
+
 def generate_tweet(title, body, label):
     genai.configure(api_key=GEMINI_API_KEY)
+    soul = SOULS.get(label, "")
     model = genai.GenerativeModel("gemini-2.0-flash")
     prompt = f"""
-以下のnote記事を読んで、{label}としてX(Twitter)に投稿する文章を作ってください。
+あなたは以下のキャラクターです：
+{soul}
+
+このキャラクターとして、以下のnote記事をX(Twitter)に紹介する投稿文を書いてください。
 
 条件：
 - 140文字以内
 - 記事の魅力が伝わるように
 - 最後に記事URLは含めない（別途追加します）
 - ハッシュタグを1〜2個つける
-- {label}らしい口調で（テディなら🧸をつかって親しみやすく、彰子なら備前焼・アートよりの雰囲気で）
+- キャラクターの口調・個性を活かす
 
 タイトル: {title}
 本文（抜粋）:
