@@ -1,13 +1,14 @@
 #!/bin/bash
 # post.sh - X(Twitter)に自動投稿するスクリプト
-# Usage: ./post.sh "投稿テキスト"
+# Usage: ./post.sh "投稿テキスト" [ChromeProfileName]
 
-USER='Profile 1'
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 TEXT="${1:-}"
+USER="${2:-Profile 1}"
 
 if [ -z "$TEXT" ]; then
-  echo "Usage: $0 \"投稿テキスト\""
+  echo "Usage: $0 \"投稿テキスト\" [ChromeProfileName]"
+  echo "  ChromeProfileName: Profile 1, Profile 2, ... (default: Profile 1)"
   exit 1
 fi
 
