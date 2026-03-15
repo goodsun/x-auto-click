@@ -126,6 +126,8 @@ def main():
         # Geminiでツイート文生成
         tweet_text = generate_tweet(latest.title, body, label)
 
+        # 「。」で改行
+        tweet_text = tweet_text.replace("。", "。\n")
         # URL追加
         full_text = f"{tweet_text}\n{latest.link}"
 
